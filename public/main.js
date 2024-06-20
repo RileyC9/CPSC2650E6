@@ -6,7 +6,6 @@ $(function() {
     '#58dc00', '#287b00', '#a8f07a', '#4ae8c4',
     '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
   ];
-
   // Initialize variables
   var $window = $(window);
   var $usernameInput = $('.usernameInput'); // Input for username
@@ -112,6 +111,29 @@ $(function() {
       $(this).remove();
     });
   }
+
+  // User status
+// User status: busy
+const busyButton = document.getElementById("busy-btn");
+busyButton.addEventListener("click", () => {
+  const msg = {
+    user: username,
+    status: "busy",
+    msg:`${username} is busy.`
+  };
+  socket.emit("status", msg)
+})
+
+//User status: available
+const avaiButton = document.getElementById("available-btn");
+avaiButton.addEventListener("click", () => {
+  const msg = {
+    user: username,
+    status: "available",
+    msg:`${username} is available.`
+  };
+  socket.emit("status", msg);
+})
 
   // Adds a message element to the messages and scrolls to the bottom
   // el - The element to add as a message
@@ -278,5 +300,11 @@ $(function() {
   socket.on('reconnect_error', () => {
     log('attempt to reconnect has failed');
   });
+
+  socket.on('updateStatus', (data)=> {
+    console.log("check2");
+    // console.log(data.message);
+    log(data.message);
+  })
 
 });

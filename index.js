@@ -10,6 +10,10 @@ server.listen(port, () => {
   console.log('Server listening at port %d', port);
 });
 
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/public/index.html');
+});
+
 // Routing
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -73,4 +77,13 @@ io.on('connection', (socket) => {
       });
     }
   });
+
+  socket.on('status', (status) => {
+    if(status){
+      socket.broadcast.emit('updateStatus', {
+      message: status.msg
+      });
+      console.log(status.msg);
+    }
+  })
 });
